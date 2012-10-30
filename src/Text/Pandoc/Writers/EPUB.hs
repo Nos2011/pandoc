@@ -115,8 +115,8 @@ writeEPUB opts doc@(Pandoc meta _) = do
   -- body pages
   -- add level 1 header to beginning if none there
   let blocks' = case blocks of
-                      (Header 1 _ : _) -> blocks
-                      _                -> Header 1 (docTitle meta) : blocks
+                      (Header 1 _ _ : _) -> blocks
+                      _                  -> Header 1 nullAttr (docTitle meta) : blocks
   -- internal reference IDs change when we chunk the file,
   -- so the next two lines fix that:
   let reftable = correlateRefs blocks'
@@ -379,7 +379,7 @@ correlateRefs bs = identTable $ execState (mapM_ go bs)
                                           , chapterIdents = []
                                           , identTable = [] }
  where go :: Block -> State IdentState ()
-       go (Header n ils) = do
+       go (Header n attr ils) = do
           when (n == 1) $
               modify $ \s -> s{ chapterNumber = chapterNumber s + 1
                               , chapterIdents = [] }

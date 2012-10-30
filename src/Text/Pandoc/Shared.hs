@@ -424,7 +424,7 @@ hierarchicalize blocks = S.evalState (hierarchicalizeWithIds blocks) ([],[])
 
 hierarchicalizeWithIds :: [Block] -> S.State ([Int],[String]) [Element]
 hierarchicalizeWithIds [] = return []
-hierarchicalizeWithIds ((Header level title'):xs) = do
+hierarchicalizeWithIds ((Header level attr title'):xs) = do
   (lastnum, usedIdents) <- S.get
   let ident = uniqueIdent title' usedIdents
   let lastnum' = take level lastnum
@@ -441,7 +441,7 @@ hierarchicalizeWithIds (x:rest) = do
   return $ (Blk x) : rest'
 
 headerLtEq :: Int -> Block -> Bool
-headerLtEq level (Header l _) = l <= level
+headerLtEq level (Header l _ _) = l <= level
 headerLtEq _ _ = False
 
 -- | Generate a unique identifier from a list of inlines.
@@ -460,15 +460,15 @@ uniqueIdent title' usedIdents =
 
 -- | True if block is a Header block.
 isHeaderBlock :: Block -> Bool
-isHeaderBlock (Header _ _) = True
+isHeaderBlock (Header _ _ _) = True
 isHeaderBlock _ = False
 
 -- | Shift header levels up or down.
 headerShift :: Int -> Pandoc -> Pandoc
 headerShift n = bottomUp shift
   where shift :: Block -> Block
-        shift (Header level inner) = Header (level + n) inner
-        shift x                    = x
+        shift (Header level attr inner) = Header (level + n) attr inner
+        shift x                         = x
 
 --
 -- TagSoup HTML handling

@@ -174,7 +174,7 @@ header = try $ do
   level <- digitToInt <$> oneOf "123456"
   optional attributes >> char '.' >> whitespace
   name <- normalizeSpaces <$> manyTill inline blockBreak
-  return $ Header level name
+  return $ Header level nullAttr name
 
 -- | Blockquote of the form "bq. content"
 blockQuote :: Parser [Char] ParserState Block

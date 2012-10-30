@@ -89,7 +89,7 @@ tableOfContents :: [Block] -> String
 tableOfContents headers =
   let contentsTree = hierarchicalize headers
   in  concatMap (blockToRTF 0 AlignDefault) $
-      [Header 1 [Str "Contents"],
+      [Header 1 nullAttr [Str "Contents"],
        BulletList (map elementToListItem contentsTree)]
 
 elementToListItem :: Element -> [Block]
@@ -206,7 +206,7 @@ blockToRTF indent alignment (DefinitionList lst) = spaceAtEnd $
   concatMap (definitionListItemToRTF alignment indent) lst
 blockToRTF indent _ HorizontalRule =
   rtfPar indent 0 AlignCenter "\\emdash\\emdash\\emdash\\emdash\\emdash"
-blockToRTF indent alignment (Header level lst) = rtfPar indent 0 alignment $
+blockToRTF indent alignment (Header level _ lst) = rtfPar indent 0 alignment $
   "\\b \\fs" ++ (show (40 - (level * 4))) ++ " " ++ inlineListToRTF lst
 blockToRTF indent alignment (Table caption aligns sizes headers rows) =
   (if all null headers

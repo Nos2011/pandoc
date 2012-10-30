@@ -109,8 +109,8 @@ pandocToLaTeX options (Pandoc (Meta title authors date) blocks) = do
   let (blocks', lastHeader) = if writerCiteMethod options == Citeproc then
                                 (blocks, [])
                               else case last blocks of
-                                Header 1 il -> (init blocks, il)
-                                _           -> (blocks, [])
+                                Header 1 attr il -> (init blocks, il)
+                                _                -> (blocks, [])
   blocks'' <- if writerBeamer options
                  then toSlides blocks'
                  else return blocks'
@@ -231,7 +231,7 @@ elementToBeamer slideLevel  (Sec lvl _num _ident tit elts)
              : bs ++ [RawBlock "latex" "\\end{block}"]
   | lvl <  slideLevel = do
       bs <- concat `fmap` mapM (elementToBeamer slideLevel) elts
-      return $ (Header lvl tit) : bs
+      return $ (Header lvl nullAttr tit) : bs
   | otherwise = do -- lvl == slideLevel
       -- note: [fragile] is required or verbatim breaks
       let hasCodeBlock (CodeBlock _ _) = [True]
@@ -386,7 +386,7 @@ blockToLaTeX (DefinitionList lst) = do
                "\\end{description}"
 blockToLaTeX HorizontalRule = return $
   "\\begin{center}\\rule{3in}{0.4pt}\\end{center}"
-blockToLaTeX (Header level lst) = sectionHeader "" level lst
+blockToLaTeX (Header level attr lst) = sectionHeader "" level lst
 blockToLaTeX (Table caption aligns widths heads rows) = do
   modify $ \s -> s{ stInTable = True, stTableNotes = [] }
   headers <- if all null heads

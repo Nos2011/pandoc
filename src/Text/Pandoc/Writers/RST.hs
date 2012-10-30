@@ -160,7 +160,7 @@ blockToRST (RawBlock f str) =
            (nest 3 $ text str) $$ blankline
 blockToRST HorizontalRule =
   return $ blankline $$ "--------------" $$ blankline
-blockToRST (Header level inlines) = do
+blockToRST (Header level attr inlines) = do
   contents <- inlineListToRST inlines
   let headerChar = if level > 5 then ' ' else "=-~^'" !! (level - 1)
   let border = text $ replicate (offset contents) headerChar

@@ -335,7 +335,7 @@ rStyle sty = mknode "w:rStyle" [("w:val",sty)] ()
 -- | Convert a Pandoc block element to OpenXML.
 blockToOpenXML :: WriterOptions -> Block -> WS [Element]
 blockToOpenXML _ Null = return []
-blockToOpenXML opts (Header lev lst) = do
+blockToOpenXML opts (Header lev attr lst) = do
   contents <- withParaProp (pStyle $ "Heading" ++ show lev) $
                blockToOpenXML opts (Para lst)
   usedIdents <- gets stSectionIds

@@ -180,7 +180,7 @@ blockToConTeXt (DefinitionList lst) =
   liftM vcat $ mapM defListItemToConTeXt lst
 blockToConTeXt HorizontalRule = return $ "\\thinrule" <> blankline
 -- If this is ever executed, provide a default for the reference identifier.
-blockToConTeXt (Header level lst) = sectionHeader "" level lst
+blockToConTeXt (Header level attr lst) = sectionHeader "" level lst
 blockToConTeXt (Table caption aligns widths heads rows) = do
     let colDescriptor colWidth alignment = (case alignment of
                                                AlignLeft    -> 'l'

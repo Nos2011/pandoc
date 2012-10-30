@@ -268,7 +268,7 @@ elementToHtml slideLevel opts (Sec level num id' title' elements) = do
   let titleSlide = slide && level < slideLevel
   header' <- if title' == [Str "\0"]  -- marker for hrule
                 then return mempty
-                else blockToHtml opts (Header level' title')
+                else blockToHtml opts (Header level' (id',[],[]) title')
   let isSec (Sec _ _ _ _ _) = True
       isSec (Blk _)         = False
   innerContents <- mapM (elementToHtml slideLevel opts)
@@ -435,7 +435,7 @@ blockToHtml opts (BlockQuote blocks) =
      else do
        contents <- blockListToHtml opts blocks
        return $ H.blockquote $ nl opts >> contents >> nl opts
-blockToHtml opts (Header level lst) = do
+blockToHtml opts (Header level attr lst) = do
   contents <- inlineListToHtml opts lst
   secnum <- liftM stSecNum get
   let contents' = if writerNumberSections opts

@@ -126,7 +126,7 @@ blockToAsciiDoc opts (Para inlines) = do
 blockToAsciiDoc _ (RawBlock _ _) = return empty
 blockToAsciiDoc _ HorizontalRule =
   return $ blankline <> text "'''''" <> blankline
-blockToAsciiDoc opts (Header level inlines) = do
+blockToAsciiDoc opts (Header level attr inlines) = do
   contents <- inlineListToAsciiDoc opts inlines
   let len = offset contents
   return $ contents <> cr <>

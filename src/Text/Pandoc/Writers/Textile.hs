@@ -121,7 +121,7 @@ blockToTextile _ (RawBlock f str) =
 
 blockToTextile _ HorizontalRule = return "<hr />\n"
 
-blockToTextile opts (Header level inlines) = do
+blockToTextile opts (Header level attr inlines) = do
   contents <- inlineListToTextile opts inlines
   let prefix = 'h' : (show level ++ ". ")
   return $ prefix ++ contents ++ "\n"
